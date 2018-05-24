@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Change";
+}
+
+
+<h2>Изменить тур</h2>
+
+<form method="post" action="">
+    <input type="hidden" value="@ViewBag.ID_Tour" name="ID_Tour" />
+    <table class="table">
+        <tr>
+            <td><p>Страна тура: </p></td>
+            <td><p>@ViewBag.Country</p></td>
+        </tr>
+
+        <tr>
+            <td><p>Курорт: </p></td>
+            <td><p>@ViewBag.Resort</p></td>
+        </tr>
+        <tr>
+            <td>Отель: </td>
+            <td><p>@ViewBag.Hotel</p></td>
+        </tr>
+        <tr>
+            <td>Начало тура: </td>
+            <td><p>@Html.TextBox("DateStart")</p></td>
+        </tr>
+        <tr>
+            <td>Конец тура: </td>
+            <td><p>@Html.TextBox("DateEnd")</p></td>
+        </tr>
+        <tr>
+            <td>Цена: </td>
+            <td>
+                @Html.TextBox("Price")
+            </td>
+        </tr>
+        <tr><td><input type="submit" value="Изменить" class="btn" /> </td><td></td></tr>
+    </table>
+</form>
+
+<div>
+    <a href="/Home/FilteredBrowse">Обратно к просмотру</a>
+</div>

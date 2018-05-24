@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+
+<h2>Добавить тур</h2>
+
+<form method="post" action="">
+    <input type="hidden" value="@ViewBag.ID_Tour" name="IDInfo" />
+    @ViewBag.Message
+    <table class="table">
+        @Html.AntiForgeryToken()
+        <tr>
+            <td><p>Страна тура: </p></td>
+            <td><p>@Html.DropDownList("ID_Country", ViewBag.Countries as SelectList, htmlAttributes: new { @class = "form-control" })</p></td>
+        </tr>
+
+        <tr>
+            <td><p>Курорт: </p></td>
+            <td><p>@Html.DropDownList("ID_Resort", ViewBag.Resorts as SelectList, htmlAttributes: new { @class = "form-control" })</p></td>
+        </tr>
+        <tr>
+            <td>Отель: </td>
+            <td><p>@Html.DropDownList("ID_Hotel", ViewBag.Hotels as SelectList, htmlAttributes: new { @class = "form-control" })</p></td>
+        </tr>
+        <tr>
+            <td>Начало тура: </td>
+            <td>
+                @Html.TextBox("DateStart")
+            </td>
+        </tr>
+        <tr>
+            <td>Конец тура: </td>
+            <td>
+                @Html.TextBox("DateEnd")
+            </td>
+        </tr>
+        <tr>
+            <td>Цена: </td>
+            <td>
+                @Html.TextBox("Price")
+            </td>
+        </tr>
+        <tr><td><input type="submit" value="Добавить" class="btn" /> </td><td></td></tr>
+    </table>
+</form>
+
+<div>
+    <a href="/Home/FilteredBrowse">Обратно к просмотру</a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#ID_Country').change(function () {
+            var id = $(this).val();
+            console.log(id);
+            $.get('/Home/getResorts?country='+id)
+                .done(function (data) {
+                    var resorts = JSON.parse(data)
+                    $('#ID_Resort').empty();
+                    for (item of resorts) {
+                        $('#ID_Resort').append('<option value='+item.Value+'>'+item.Text+'</option>');
+                    }
+
+                });
+
+            $.get('/Home/getHotels?country=' + id)
+                .done(function (data) {
+                    var resorts = JSON.parse(data)
+                    $('#ID_Hotel').empty();
+                    for (item of resorts) {
+                        $('#ID_Hotel').append('<option value=' + item.Value + '>' + item.Text + '</option>');
+                    }
+
+                });
+
+        });
+
+    });
+</script>

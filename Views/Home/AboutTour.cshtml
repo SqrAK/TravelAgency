@@ -1,0 +1,91 @@
+﻿@model TravelAgency.Models.Tour
+@{
+    ViewBag.Title = "AboutTour";
+}
+
+
+<h2>Подробнее о туре</h2>
+
+<table class="table">
+    <tr>
+        <td><p>Страна тура: </p></td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Resort.Country.Name)</p></td>
+    </tr>
+    <tr>
+        <td><p>Описание страны: </p></td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Resort.Country.Descriptions)</p></td>
+    </tr>
+    <tr>
+        <td><p>Курорт: </p></td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Resort.Name)</p></td>
+    </tr>
+    <tr>
+        <td><p>Описание курорта: </p></td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Resort.Descriptions)</p></td>
+    </tr>
+    <tr>
+        <td>Отель: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Hotel.Name)</p></td>
+    </tr>
+    <tr>
+        <td>Описание отеля: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Hotel.Descriptions)</p></td>
+    </tr>
+    <tr>
+        <td>Звезды отеля: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Hotel.Stars)</p></td>
+    </tr>
+    <tr>
+        <td>Адрес отеля: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Hotel.Address)</p></td>
+    </tr>
+    <tr>
+        <td>Телефо отеля: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.Hotel.Phone)</p></td>
+    </tr>
+    <tr>
+        <td>Дата начала: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.DateStart)</p></td>
+    </tr>
+    <tr>
+        <td>Дата окончания: </td>
+        <td><p>@Html.DisplayFor(modelItem => Model.DateEnd)</p></td>
+    </tr>
+    <tr>
+        <td>Цена тура: </td>
+        <td>
+            @Html.DisplayFor(modelItem => Model.Price)
+        </td>
+    </tr>
+</table>
+
+<div>
+    <a href="/Home/FilteredBrowse">Обратно к просмотру</a>
+</div>
+
+<div id="map" style="width:700px; height:500px; margin-top: 20px;"></div>
+
+<script>
+
+
+    //Маркеры
+    function initMap() {
+        var myLatLng = { lat: @Html.DisplayFor(modelItem => Model.Hotel.Lat), lng: @Html.DisplayFor(modelItem => Model.Hotel.Lng) };
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: myLatLng
+        });
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Отель'
+        });
+
+    }
+
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAObK6x5vBjQGi8l3I50xJlBR2uotbY8Ws&callback=initMap"
+        async defer></script>

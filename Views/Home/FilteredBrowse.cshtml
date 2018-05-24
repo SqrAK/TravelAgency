@@ -1,0 +1,126 @@
+﻿@model TravelAgency.Models.FilteredTours
+@using TravelAgency.Helpers
+
+@{
+    ViewBag.Title = "Просмотр туров";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Просмотр туров</h2>
+
+<form method="get">
+    <div class="form-inline">
+        <label class="control-label"> Страна: </label>
+        @Html.DropDownList("country", Model.Country as SelectList,
+                                 htmlAttributes: new { @class = "form-control" })
+
+        <label class="control-label">Курорт: </label>
+        @Html.DropDownList("resort", Model.CountryResort as SelectList,
+                            htmlAttributes: new { @class = "form-control" })
+        <label class="control-label"> звезд отеля: </label>
+        <input type="number" name="stars" value="@Model.SelectedStar" min="1" max="5" />  
+        
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+
+        <br />
+        <br />
+    </div>
+</form>
+<br />
+
+<table class="table">
+    <tr>
+        <th> Страна тура </th>
+        <th> Курорт </th>
+        <th> Цена </th>
+        <th> Дата отправления </th>
+        <th> Дата возвращения </th>
+        <th> Название отеля </th>
+        <th> Звезды отеля </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+
+    @foreach (var item in Model.Tours)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Resort.Country.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Resort.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateStart)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateEnd)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hotel.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hotel.Stars)
+        </td>
+        @if (Request.IsAuthenticated && ViewContext.HttpContext.User.IsInRole("Users"))
+        {
+
+        <td><p><a href="/Home/AboutTour/@item.ID_Tour">Подробнее</a></p></td>
+        }
+        
+
+        @if (Request.IsAuthenticated && (ViewContext.HttpContext.User.IsInRole("Manager") || ViewContext.HttpContext.User.IsInRole("Administrators")))
+        {
+            <td><p><a href="/Home/ChangeTour/@item.ID_Tour">Изменить</a></p></td>
+        }
+        @if (Request.IsAuthenticated && ViewContext.HttpContext.User.IsInRole("Administrators"))
+        {
+
+            <td><p><a href="/Home/DeleteTour/@item.ID_Tour">Удалить</a></p></td>
+        }
+
+    </tr>
+    }
+
+</table>
+<div>
+    @if (Request.IsAuthenticated && (ViewContext.HttpContext.User.IsInRole("Manager") || ViewContext.HttpContext.User.IsInRole("Administrators")))
+    {
+        <center>@Html.ActionLink("Добавить тур", "AddTour", null, new { @class = "btn btn-primary btn-large" })</center>
+    }
+    
+</div>
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("FilteredBrowse",
+           new
+           {
+               page = x,
+               country = Model.SelectedToursCountry,
+               resort = Model.SelectedResort,
+               free = Model.Free
+           }))
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#country').change(function () {
+            var id = $(this).val();
+            console.log(id);
+            $.get('/Home/getResorts?country='+id)
+                .done(function (data) {
+                    var resorts = JSON.parse(data)
+                    $('#resort').empty();
+                    for (item of resorts) {
+                        $('#resort').append('<option value='+item.Value+'>'+item.Text+'</option>');
+                    }
+
+                });
+        });
+        
+    });
+</script>

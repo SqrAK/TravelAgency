@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<h2>Вы уверены, что хотите удалить тур</h2>
+
+<form method="post" action="">
+    <input type="hidden" value="@ViewBag.ID_Tour" name="ID_Tour" />
+    <table class="table">
+        <tr>
+            <td><p>Страна тура: </p></td>
+            <td><p>@ViewBag.Country</p></td>
+        </tr>
+
+        <tr>
+            <td><p>Курорт: </p></td>
+            <td><p>@ViewBag.Resort</p></td>
+        </tr>
+        <tr>
+            <td>Отель: </td>
+            <td><p>@ViewBag.Hotel</p></td>
+        </tr>
+        <tr>
+            <td>Цена: </td>
+            <td>
+                @ViewBag.Price
+            </td>
+        </tr>
+        <tr><td><input type="submit" value="Удалить" class="btn" /> </td><td></td></tr>
+    </table>
+</form>
+
+<div>
+    <a href="/Home/FilteredBrowse">Обратно к просмотру</a>
+</div>
